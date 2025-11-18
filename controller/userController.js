@@ -98,14 +98,7 @@ console.log("JWT_EXPIRE =", process.env.JWT_EXPIRE);
         console.log("Generate token: ", token);
 
            // res.status(200).json({message:"login Successfully", user, token});
-            res.cookie("token", token, {
-    httpOnly: true,
-    secure: false, // HTTPS par true karna
-    sameSite: "lax",      
-    maxAge: 24 * 60 * 60 * 1000 // 1 day
-});
-res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax",max
-})
+       res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax",maxAge: 24*60*60*1000});
 
 res.status(200).json({message:"login Successfully", user});
 
@@ -116,4 +109,14 @@ res.status(200).json({message:"login Successfully", user});
 
     }
 
-module.exports = {registerUser,getAllUsers,deleteUser,getUser, updateUser, patchUser, loginUser};
+    const logoutUser = (req, res) => {
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: false, 
+        sameSite: "lax"
+    });
+
+    return res.status(200).json({ message: "Logout successful" });
+};
+
+module.exports = {registerUser,getAllUsers,deleteUser,getUser, updateUser, patchUser, loginUser, logoutUser};
